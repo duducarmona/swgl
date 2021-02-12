@@ -1,0 +1,21 @@
+.CharacterDetail {
+  background-color: #323D48;
+  margin: 16px;
+  padding: 16px;
+}
+
+.CharacterDetail h2 {
+  margin: 0;
+}
+
+.characteristics-container {
+  margin-left: 16px;
+}
+
+.characteristics {
+  margin-left: 16px;
+}
+
+.starships-list {
+  margin-left: 32px;
+}
