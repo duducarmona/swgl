@@ -1,50 +1,102 @@
 import React, { PureComponent } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
 import axios from 'axios';
 import CharacterDetail from './CharacterDetail';
+import './Characters.css';
 
 class Characters extends PureComponent {
 	state = {
 		characters: [],
-		scrollerRef: React.createRef(),
+		stringSearch: '',
+		next: 'next',
+		page: 1,
+		totalPages: 0,
+		searchValue: ''
 	};
 
-	loadMore = page => {
-		axios.get(`https://swapi.dev/api/people/?page=${page}`).then(res => {
+	componentDidMount() {
+		this.loadCharacters();
+		this.scrollListener = window.addEventListener('scroll', e => {
+			this.handleScroll(e);
+		});
+	}
+
+	loadCharacters = async () => {
+		const { page, characters, stringSearch } = this.state;
+		const url = `https://swapi.dev/api/people/?` + stringSearch + `page=${page}`;
+		let newCharacters = [];
+
+		if (page > 1) {
+			newCharacters = characters;
+		}
+
+		await axios.get(url).then(res => {
 			this.setState({
-				characters: this.state.characters.concat(res.data.results),
+				characters: newCharacters.concat(res.data.results),
+				next: res.data.next,
+				totalPages: Math.ceil(res.data.count / 10),
 			});
 		});
 	};
 
+	loadMore = () => {
+		this.setState(
+			{
+				page: this.state.page + 1,
+			},
+			() => {
+				if (this.state.next !== null && this.state.page <= this.state.totalPages) {
+					this.loadCharacters();
+				}
+			}
+		);
+	};
+
+	handleScroll = async () => {
+		const lastLi = document.querySelector('ul > li:last-child');
+		const lastLiOffset = lastLi.offsetTop + lastLi.clientHeight;
+		const pageOffset = window.pageYOffset + window.innerHeight;
+
+		if (pageOffset > lastLiOffset) {
+			await this.loadMore();
+		}
+	};
+
+	searchByCharacterName = name => {
+		console.log('name: ', name);
+		this.setState(
+			{
+				stringSearch: `search=${name}&`,
+				page: 1,
+			},
+			() => {
+				this.loadCharacters();
+			}
+		);
+	};
+
+	handleInput = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
 	render() {
-		const { scrollerRef, characters } = this.state;
+		const { characters, searchValue } = this.state;
 
 		return (
-			<div style={{ height: '700px', overflow: 'auto' }} ref={scrollerRef}>
-				<div>
-					<h1>Star Wars Galactic League</h1>
-					<ul className="list-no-decoration">
-						<InfiniteScroll
-							pageStart={0}
-							loadMore={this.loadMore}
-							hasMore={characters.length < 82}
-							loader={
-								<div className="loader" key={0}>
-									Loading ...
-								</div>
-							}
-							useWindow={false}
-							getScrollParent={() => scrollerRef.current}
-						>
-							{characters.map((character, index) => (
-								<li key={index}>
-									<CharacterDetail character={character} />
-								</li>
-							))}
-						</InfiniteScroll>
-					</ul>
+			<div>
+				<h1>Star Wars Galactic League</h1>
+				<div className='searcher-container'>
+					<input className='searcher-input searcher' type="text" name="searchValue" value={searchValue} onChange={this.handleInput} placeholder='Search by name'></input>
+					<i className='material-icons magnifying-glass searcher' onClick={() => {this.searchByCharacterName(searchValue)}}>search</i>
 				</div>
+				<ul className="list-no-decoration">
+					{characters.map((character, index) => (
+						<li key={index}>
+							<CharacterDetail character={character} />
+						</li>
+					))}
+				</ul>
 			</div>
 		);
 	}

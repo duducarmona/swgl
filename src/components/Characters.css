@@ -1,0 +1,29 @@
+.searcher-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searcher {
+  background-color: #414850;
+  border-radius: 5px;
+  border: 1px solid #999999;
+  color: #999999;
+}
+
+.searcher-input {
+  font-size: 20px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  width: 250px;
+  height: 30px;
+  padding-left: 15px;
+}
+
+.magnifying-glass {
+  font-size: 30px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  height: 30px;
+  padding: 1px;
+}
