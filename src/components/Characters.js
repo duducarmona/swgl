@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import axios from 'axios';
 import CharacterDetail from './CharacterDetail';
 import './Characters.css';
+import Header from './Header';
 
 class Characters extends PureComponent {
 	state = {
@@ -10,7 +11,7 @@ class Characters extends PureComponent {
 		next: 'next',
 		page: 1,
 		totalPages: 0,
-		searchValue: ''
+		searchValue: '',
 	};
 
 	componentDidMount() {
@@ -62,7 +63,6 @@ class Characters extends PureComponent {
 	};
 
 	searchByCharacterName = name => {
-		console.log('name: ', name);
 		this.setState(
 			{
 				stringSearch: `search=${name}&`,
@@ -74,11 +74,15 @@ class Characters extends PureComponent {
 		);
 	};
 
-	handleInput = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
+	handleInput = e => {
+		this.setState({
+			[e.target.name]: e.target.value,
+		});
+	};
+
+	update = characters => {
+		this.setState({ characters: characters });
+	};
 
 	render() {
 		const { characters, searchValue } = this.state;
@@ -86,9 +90,26 @@ class Characters extends PureComponent {
 		return (
 			<div>
 				<h1>Star Wars Galactic League</h1>
-				<div className='searcher-container'>
-					<input className='searcher-input searcher' type="text" name="searchValue" value={searchValue} onChange={this.handleInput} placeholder='Search by name'></input>
-					<i className='material-icons magnifying-glass searcher' onClick={() => {this.searchByCharacterName(searchValue)}}>search</i>
+				<div className="search-filter-container">
+					<div className="searcher-container">
+						<input
+							className="searcher-input searcher"
+							type="text"
+							name="searchValue"
+							value={searchValue}
+							onChange={this.handleInput}
+							placeholder="Search by name"
+						></input>
+						<i
+							className="material-icons magnifying-glass searcher"
+							onClick={() => {
+								this.searchByCharacterName(searchValue);
+							}}
+						>
+							search
+						</i>
+					</div>
+					<Header update={this.update} />
 				</div>
 				<ul className="list-no-decoration">
 					{characters.map((character, index) => (

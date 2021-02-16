@@ -6,7 +6,7 @@ import { Route } from 'react-router-dom';
 function App() {
 	return (
 		<div className="App">
-      <Route exact path={'/characters'} component={Characters} />
+			<Route exact path={'/characters'} component={Characters} />
 		</div>
 	);
 }

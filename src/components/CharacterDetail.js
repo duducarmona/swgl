@@ -29,7 +29,7 @@ class CharacterDetail extends PureComponent {
 			});
 		});
 
-    // Get the starships names.
+		// Get the starships names.
 		starships.forEach(starshipURL => {
 			axios.get(starshipURL).then(response => {
 				this.setState({
@@ -46,27 +46,27 @@ class CharacterDetail extends PureComponent {
 		return (
 			<div className="CharacterDetail">
 				<h2>{character.name}</h2>
-        <div className="characteristics-container">
-          <ul className="list-no-decoration">
-            <h3>Species:</h3>
-            <div className="characteristics">
-              {speciesNames.map((specieName, index) => (
-                <li key={index}>{specieName}</li>
-              ))}
-              {speciesNames.length === 0 && <li>Human</li>}
-            </div>
-          </ul>
-          <h3>Planet:</h3>
-          <p className="characteristics">{planet}</p>
-          <ul>
-          <h3>Starships:</h3>
-            <div className="characteristics starships-list">
-              {starshipsNames.map((starshipName, index) => (
-                <li key={index}>{starshipName}</li>
-              ))}
-            </div>
-          </ul>
-        </div>
+				<div className="characteristics-container">
+					<ul className="list-no-decoration">
+						<h3>Species:</h3>
+						<div className="characteristics">
+							{speciesNames.map((specieName, index) => (
+								<li key={index}>{specieName}</li>
+							))}
+							{speciesNames.length === 0 && <li>Human</li>}
+						</div>
+					</ul>
+					<h3>Planet:</h3>
+					<p className="characteristics">{planet}</p>
+					<ul>
+						<h3>Starships:</h3>
+						<div className="characteristics starships-list">
+							{starshipsNames.map((starshipName, index) => (
+								<li key={index}>{starshipName}</li>
+							))}
+						</div>
+					</ul>
+				</div>
 			</div>
 		);
 	}
