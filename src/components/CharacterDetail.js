@@ -10,34 +10,37 @@ class CharacterDetail extends PureComponent {
 		starshipsNames: [],
 	};
 
-	componentDidMount() {
+	componentDidMount = async () => {
 		const { species, homeworld, starships } = this.props.character;
+		let speciesNamesAux = [];
+		let planetNameAux = '';
+		let starshipsNamesAux = [];
 
 		// Get the species names.
-		species.forEach(specieURL => {
-			axios.get(specieURL).then(response => {
-				this.setState({
-					speciesNames: [...this.state.speciesNames, response.data.name],
-				});
+		for (const specieURL of species) {
+			await axios.get(specieURL).then(response => {
+				speciesNamesAux = speciesNamesAux.concat(response.data.name);
 			});
-		});
+		}
 
 		// Get the planet name.
-		axios.get(homeworld).then(response => {
-			this.setState({
-				planet: response.data.name,
-			});
+		await axios.get(homeworld).then(response => {
+			planetNameAux = response.data.name
 		});
 
 		// Get the starships names.
-		starships.forEach(starshipURL => {
-			axios.get(starshipURL).then(response => {
-				this.setState({
-					starshipsNames: [...this.state.starshipsNames, response.data.name],
-				});
+		for (const starshipURL of starships) {
+			await axios.get(starshipURL).then(response => {
+					starshipsNamesAux = starshipsNamesAux.concat(response.data.name);
 			});
+		}
+
+		this.setState({
+			speciesNames: speciesNamesAux,
+			planet: planetNameAux,
+			starshipsNames: starshipsNamesAux
 		});
-	}
+	};
 
 	render() {
 		const { character } = this.props;

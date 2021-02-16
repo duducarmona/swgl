@@ -8,7 +8,7 @@ export const NavbarWrapper = styled.nav`
 	position: absolute;
 	top: 30vh;
 	right: ${props => (props.open ? '0' : '-100%')};
-	width: 40%;
+	width: 50%;
 	transition: right 0.3s linear;
 	background-color: #414850;
 	color: #e6605f;

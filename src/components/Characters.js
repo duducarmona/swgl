@@ -62,11 +62,12 @@ class Characters extends PureComponent {
 		}
 	};
 
-	searchByCharacterName = name => {
-		this.setState(
+	searchByCharacterName = async name => {
+		await this.setState(
 			{
 				stringSearch: `search=${name}&`,
 				page: 1,
+				characters: []
 			},
 			() => {
 				this.loadCharacters();

@@ -7,88 +7,210 @@ import './Navbar.css';
 class Navbar extends PureComponent {
 	state = {
 		speciesNames: [],
-		next: 'next',
+		planetsNames: [],
+		starshipsNames: [],
 		openSpecies: true,
+		openPlanets: true,
+		openStarships: true,
 		speciesNamesDisplay: [],
+		planetsNamesDisplay: [],
+		starshipsNamesDisplay: [],
 		speciesSelected: [],
-		species: [],
+		planetsSelected: [],
+		starshipsSelected: [],
 	};
 
 	componentDidMount() {
-		this.loadSpecies();
+		this.loadItems('species');
+		this.loadItems('planets');
+		this.loadItems('starships');
 	}
 
-	loadSpecies = async () => {
+	loadItems = async category => {
 		let page = 1;
-		let speciesNamesAux = [];
-		let speciesAux = [];
+		let next = 'next';
+		let itemsAux = [];
+		let itemsNamesAux = [];
 
-		while (this.state.next !== null) {
-			await axios.get(`https://swapi.dev/api/species/?page=${page}`).then(res => {
-				this.setState({
-					next: res.data.next,
-				});
-
-				speciesAux = speciesAux.concat(res.data.results);
+		while (next !== null) {
+			await axios.get(`https://swapi.dev/api/${category}/?page=${page}`).then(res => {
+				next = res.data.next;
+				itemsAux = itemsAux.concat(res.data.results);
 			});
 
 			page++;
 		}
 
-		speciesAux.forEach(specie => {
-			speciesNamesAux = speciesNamesAux.concat(specie.name);
+		itemsAux.forEach(item => {
+			itemsNamesAux = itemsNamesAux.concat(item.name);
 		});
 
-		this.setState({
-			speciesNames: speciesNamesAux,
-			species: speciesAux,
-		});
+		switch (category) {
+			case 'species':
+				this.setState({
+					speciesNames: itemsNamesAux,
+				});
+				break;
+			case 'planets':
+				this.setState({
+					planetsNames: itemsNamesAux,
+				});
+				break;
+			case 'starships':
+				this.setState({
+					starshipsNames: itemsNamesAux,
+				});
+				break;
+			default:
+				break;
+		}
 	};
 
-	displaySpecies = () => {
-		const { openSpecies } = this.state;
-		let speciesNamesAux = [];
+	displayItemsFilters = category => {
+		const { openSpecies, speciesNames, openPlanets, planetsNames, openStarships, starshipsNames } = this.state;
+		let itemsNamesAux = [];
+		let open = false;
+		let names = [];
 
-		if (openSpecies) {
-			speciesNamesAux = this.state.speciesNames;
+		switch (category) {
+			case 'species':
+				open = openSpecies;
+				names = speciesNames;
+				break;
+			case 'planets':
+				open = openPlanets;
+				names = planetsNames;
+				break;
+			case 'starships':
+				open = openStarships;
+				names = starshipsNames;
+				break;
+			default:
+				break;
 		}
 
-		this.setState({
-			speciesNamesDisplay: speciesNamesAux,
-			openSpecies: !openSpecies,
-		});
+		if (open) {
+			itemsNamesAux = names;
+		}
+
+		switch (category) {
+			case 'species':
+				this.setState({
+					speciesNamesDisplay: itemsNamesAux,
+					openSpecies: !openSpecies,
+					openPlanets: true,
+					openStarships: true,
+				});
+				break;
+			case 'planets':
+				this.setState({
+					planetsNamesDisplay: itemsNamesAux,
+					openPlanets: !openPlanets,
+					openSpecies: true,
+					openStarships: true,
+				});
+				break;
+			case 'starships':
+				this.setState({
+					starshipsNamesDisplay: itemsNamesAux,
+					openStarships: !openStarships,
+					openSpecies: true,
+					openPlanets: true,
+				});
+				break;
+			default:
+				break;
+		}
 	};
 
-	handleCheckboxSpecie = event => {
-		const { speciesSelected } = this.state;
-		const speciesSelectedAux = speciesSelected;
-		const pos = speciesSelectedAux.indexOf(event.target.value);
+	handleCheckbox = (event, category) => {
+		let itemsSelectedAux = [];
+		let pos = -1;
+		const { speciesSelected, planetsSelected, starshipsSelected } = this.state;
+
+		switch (category) {
+			case 'species':
+				itemsSelectedAux = speciesSelected;
+				break;
+			case 'planets':
+				itemsSelectedAux = planetsSelected;
+				break;
+			case 'starships':
+				itemsSelectedAux = starshipsSelected;
+				break;
+
+			default:
+				break;
+		}
+
+		pos = itemsSelectedAux.indexOf(event.target.value);
 
 		if (event.target.checked) {
 			if (pos === -1) {
-				speciesSelectedAux.push(event.target.value);
+				itemsSelectedAux.push(event.target.value);
 			}
 		} else {
 			if (pos >= 0) {
-				speciesSelectedAux.splice(pos, 1);
+				itemsSelectedAux.splice(pos, 1);
 			}
 		}
 
-		this.setState({
-			speciesSelected: speciesSelectedAux,
-		});
+		switch (category) {
+			case 'species':
+				this.setState({
+					speciesSelected: itemsSelectedAux,
+				});
+				break;
+			case 'planets':
+				this.setState({
+					planetsSelected: itemsSelectedAux,
+				});
+				break;
+			case 'starships':
+				this.setState({
+					starshipsSelected: itemsSelectedAux,
+				});
+				break;
+			default:
+				break;
+		}
 	};
 
 	applyFilters = async () => {
-		const { speciesSelected } = this.state;
+		const CATEGORIES = ['species', 'planets', 'starships'];
+		let itemsSelected = [];
+		const { speciesSelected, planetsSelected, starshipsSelected } = this.state;
 		let urlsPeople = [];
+		let peopleField = '';
 		let charactersAux = [];
 
-		for (const specieSelected of speciesSelected) {
-			await axios.get(`https://swapi.dev/api/species/?search=${specieSelected}`).then(res => {
-				urlsPeople = urlsPeople.concat(res.data.results[0].people);
-			});
+		for (const category of CATEGORIES) {
+			switch (category) {
+				case 'species':
+					itemsSelected = speciesSelected;
+					peopleField = 'people';
+					break;
+				case 'planets':
+					itemsSelected = planetsSelected;
+					peopleField = 'residents';
+					break;
+				case 'starships':
+					itemsSelected = starshipsSelected;
+					peopleField = 'pilots';
+					break;
+				default:
+					break;
+			}
+
+			for (const itemSelected of itemsSelected) {
+				await axios.get(`https://swapi.dev/api/${category}/?search=${itemSelected}`).then(res => {
+					urlsPeople = urlsPeople.concat(res.data.results[0][peopleField]);
+				});
+			}
 		}
+
+		// To delete the duplicates.
+		urlsPeople = [...new Set(urlsPeople)];
 
 		for (const urlPeople of urlsPeople) {
 			await axios.get(urlPeople).then(res => {
@@ -96,6 +218,7 @@ class Navbar extends PureComponent {
 			});
 		}
 
+		this.props.update([]);
 		this.props.update(charactersAux);
 	};
 
@@ -105,25 +228,63 @@ class Navbar extends PureComponent {
 
 	render() {
 		const { open } = this.props;
-		const { speciesNamesDisplay } = this.state;
+		const { speciesNamesDisplay, planetsNamesDisplay, starshipsNamesDisplay } = this.state;
 
 		return (
 			<NavbarWrapper open={open}>
-				<p onClick={this.displaySpecies}>Species</p>
-				<ul className="list-no-decoration species-list">
-					{speciesNamesDisplay.map((specieName, index) => (
-						<li key={index} className="species-li">
-							<label>
-								<input type="checkbox" id="cbox1" value={specieName} onChange={this.handleCheckboxSpecie}></input>
-								{specieName}
-							</label>
-						</li>
-					))}
-				</ul>
-				<p>Planets</p>
-				<p>Starships</p>
+				<p onClick={() => this.displayItemsFilters('species')}>Species</p>
 				{!this.state.openSpecies && (
-					<button className="species-btn" onClick={this.applyFilters}>
+					<ul className="list-no-decoration navbar-list">
+						{speciesNamesDisplay.map((specieName, index) => (
+							<li key={index} className="navbar-li">
+								<label>
+									<input
+										type="checkbox"
+										value={specieName}
+										onChange={event => this.handleCheckbox(event, 'species')}
+									></input>
+									{specieName}
+								</label>
+							</li>
+						))}
+					</ul>
+				)}
+				<p onClick={() => this.displayItemsFilters('planets')}>Planets</p>
+				{!this.state.openPlanets && (
+					<ul className="list-no-decoration navbar-list">
+						{planetsNamesDisplay.map((planetName, index) => (
+							<li key={index} className="navbar-li">
+								<label>
+									<input
+										type="checkbox"
+										value={planetName}
+										onChange={event => this.handleCheckbox(event, 'planets')}
+									></input>
+									{planetName}
+								</label>
+							</li>
+						))}
+					</ul>
+				)}
+				<p onClick={() => this.displayItemsFilters('starships')}>Starships</p>
+				{!this.state.openStarships && (
+					<ul className="list-no-decoration navbar-list">
+						{starshipsNamesDisplay.map((starshipName, index) => (
+							<li key={index} className="navbar-li">
+								<label>
+									<input
+										type="checkbox"
+										value={starshipName}
+										onChange={event => this.handleCheckbox(event, 'starships')}
+									></input>
+									{starshipName}
+								</label>
+							</li>
+						))}
+					</ul>
+				)}
+				{(!this.state.openSpecies || !this.state.openPlanets || !this.state.openStarships) && (
+					<button className="navbar-btn" onClick={this.applyFilters}>
 						Apply
 					</button>
 				)}
