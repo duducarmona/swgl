@@ -8,10 +8,11 @@ class CharacterDetail extends PureComponent {
 		speciesNames: [],
 		planet: '',
 		starshipsNames: [],
+		isMine: false
 	};
 
 	componentDidMount = async () => {
-		const { species, homeworld, starships } = this.props.character;
+		const { species, homeworld, starships, url } = this.props.character;
 		let speciesNamesAux = [];
 		let planetNameAux = '';
 		let starshipsNamesAux = [];
@@ -25,29 +26,65 @@ class CharacterDetail extends PureComponent {
 
 		// Get the planet name.
 		await axios.get(homeworld).then(response => {
-			planetNameAux = response.data.name
+			planetNameAux = response.data.name;
 		});
 
 		// Get the starships names.
 		for (const starshipURL of starships) {
 			await axios.get(starshipURL).then(response => {
-					starshipsNamesAux = starshipsNamesAux.concat(response.data.name);
+				starshipsNamesAux = starshipsNamesAux.concat(response.data.name);
 			});
 		}
 
 		this.setState({
 			speciesNames: speciesNamesAux,
 			planet: planetNameAux,
-			starshipsNames: starshipsNamesAux
+			starshipsNames: starshipsNamesAux,
+			isMine: this.characterIsMine(url)
 		});
 	};
 
+	addCharacterToLeague = (characterURL) => {
+		let myCharacters = JSON.parse(localStorage.getItem('myCharacters'));
+
+		if (!myCharacters) {
+			myCharacters = [];
+		}
+
+		myCharacters.push(characterURL);
+
+		localStorage.setItem('myCharacters', JSON.stringify(myCharacters));
+
+		this.setState({
+			isMine: true
+		});
+	}
+
+	characterIsMine = (characterURL) => {
+		// Function to check if the character is already in My Galactic League.
+		const myCharacters = JSON.parse(localStorage.getItem('myCharacters'));
+		let res = false;
+
+		if (myCharacters) {
+			res = myCharacters.includes(characterURL);
+		} 
+		
+		return res;
+	}
+
 	render() {
 		const { character } = this.props;
-		const { speciesNames, planet, starshipsNames } = this.state;
+		const { speciesNames, planet, starshipsNames, isMine } = this.state;
 
 		return (
 			<div className="CharacterDetail">
+				{!isMine && 
+					<div className="add-button-container">
+						<i className="material-icons add-remove-button" onClick={() => {this.addCharacterToLeague(character.url)}}>
+							person_add_alt_1
+						</i>
+					</div>
+				}
 				<h2>{character.name}</h2>
 				<div className="characteristics-container">
 					<ul className="list-no-decoration">

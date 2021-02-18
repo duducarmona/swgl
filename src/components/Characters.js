@@ -3,6 +3,7 @@ import axios from 'axios';
 import CharacterDetail from './CharacterDetail';
 import './Characters.css';
 import Header from './Header';
+import { Link } from 'react-router-dom';
 
 class Characters extends PureComponent {
 	state = {
@@ -90,7 +91,10 @@ class Characters extends PureComponent {
 
 		return (
 			<div>
-				<h1>Star Wars Galactic League</h1>
+				<div className='arrow-button-container-right'>
+					<Link to={`/league`}><i className="material-icons arrow-button">keyboard_arrow_right</i></Link>
+				</div>
+				<h1>Star Wars Characters</h1>
 				<div className="search-filter-container">
 					<div className="searcher-container">
 						<input

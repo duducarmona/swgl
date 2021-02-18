@@ -32,3 +32,23 @@ h1 {
   -webkit-text-stroke: 0.5px yellow;
   color: transparent;
 }
+
+a {
+  text-decoration: none;
+}
+
+.arrow-button {
+  background-color: #414850;
+  border: 1px solid #999999;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+i {
+  color: #E6605F;
+}
