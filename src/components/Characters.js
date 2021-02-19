@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import axios from 'axios';
 import CharacterDetail from './CharacterDetail';
-import './Characters.css';
 import Header from './Header';
+import CharacterCounter from './CharacterCounter';
+import './Characters.css';
 import { Link } from 'react-router-dom';
 
 class Characters extends PureComponent {
@@ -13,6 +14,7 @@ class Characters extends PureComponent {
 		page: 1,
 		totalPages: 0,
 		searchValue: '',
+		numberOfCharacters: 0,
 	};
 
 	componentDidMount() {
@@ -20,7 +22,16 @@ class Characters extends PureComponent {
 		this.scrollListener = window.addEventListener('scroll', e => {
 			this.handleScroll(e);
 		});
+		this.calculateNumberOfMyCharacters();
 	}
+
+	calculateNumberOfMyCharacters = () => {
+		const myCharacters = JSON.parse(localStorage.getItem('myCharacters'));
+
+		this.setState({
+			numberOfCharacters: myCharacters.length,
+		});
+	};
 
 	loadCharacters = async () => {
 		const { page, characters, stringSearch } = this.state;
@@ -68,7 +79,7 @@ class Characters extends PureComponent {
 			{
 				stringSearch: `search=${name}&`,
 				page: 1,
-				characters: []
+				characters: [],
 			},
 			() => {
 				this.loadCharacters();
@@ -86,14 +97,23 @@ class Characters extends PureComponent {
 		this.setState({ characters: characters });
 	};
 
+	updateCounter = numberOfCharacters => {
+		this.setState({
+			numberOfCharacters: numberOfCharacters,
+		});
+	};
+
 	render() {
-		const { characters, searchValue } = this.state;
+		const { characters, searchValue, numberOfCharacters } = this.state;
 
 		return (
 			<div>
-				<div className='arrow-button-container-right'>
-					<Link to={`/league`}><i className="material-icons arrow-button">keyboard_arrow_right</i></Link>
+				<div className="arrow-button-container-right">
+					<Link to={'/league'}>
+						<i className="material-icons arrow-button">keyboard_arrow_right</i>
+					</Link>
 				</div>
+				<CharacterCounter numberOfCharacters={numberOfCharacters} />
 				<h1>Star Wars Characters</h1>
 				<div className="search-filter-container">
 					<div className="searcher-container">
@@ -119,7 +139,7 @@ class Characters extends PureComponent {
 				<ul className="list-no-decoration">
 					{characters.map((character, index) => (
 						<li key={index}>
-							<CharacterDetail character={character} />
+							<CharacterDetail character={character} updateCounter={this.updateCounter} />
 						</li>
 					))}
 				</ul>

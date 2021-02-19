@@ -22,6 +22,7 @@ class Header extends PureComponent {
 				charactersHeader: characters,
 			},
 			() => {
+				console.log('entro');
 				this.props.update(this.state.charactersHeader);
 			}
 		);

@@ -223,6 +223,7 @@ class Navbar extends PureComponent {
 	};
 
 	update = characters => {
+		console.log('¿ENTRO AQUÍ EN ALGÚN MOMENTO?????');
 		this.setState({ charactersHeader: characters });
 	};
 

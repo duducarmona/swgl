@@ -1,0 +1,17 @@
+.counter-container {
+  position: absolute;
+  top: 120px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.counter-img {
+  height: 8%;
+  width: 8%;
+  margin-right: 5px;
+}
+
+.counter-number {
+  margin: 0;
+}

@@ -69,6 +69,8 @@ class CharacterDetail extends PureComponent {
 		this.setState({
 			isMine: add,
 		});
+
+		this.props.updateCounter(myCharacters.length);
 	};
 
 	characterIsMine = () => {
@@ -148,6 +150,7 @@ class CharacterDetail extends PureComponent {
 CharacterDetail.propTypes = {
 	character: PropTypes.object,
 	updateMyGalacticLeague: PropTypes.func,
+	updateCounter: PropTypes.func,
 };
 
 export default CharacterDetail;
