@@ -7,7 +7,6 @@ const MenuButtonWrapper = styled.button`
 	background-color: #414850;
 	border-radius: 5px;
 	border: 1px solid #999999;
-	color: #999999;
 	height: 34px;
 
 	@media only screen and (min-width: 624px) {

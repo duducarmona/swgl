@@ -8,11 +8,11 @@ class CharacterDetail extends PureComponent {
 		speciesNames: [],
 		planet: '',
 		starshipsNames: [],
-		isMine: false
+		isMine: false,
 	};
 
 	componentDidMount = async () => {
-		const { species, homeworld, starships, url } = this.props.character;
+		const { species, homeworld, starships } = this.props.character;
 		let speciesNamesAux = [];
 		let planetNameAux = '';
 		let starshipsNamesAux = [];
@@ -40,37 +40,53 @@ class CharacterDetail extends PureComponent {
 			speciesNames: speciesNamesAux,
 			planet: planetNameAux,
 			starshipsNames: starshipsNamesAux,
-			isMine: this.characterIsMine(url)
+			isMine: this.characterIsMine(this.props.character),
 		});
 	};
 
-	addCharacterToLeague = (characterURL) => {
+	addRemoveCharacterLeague = (add, character) => {
+		// The parameter "add" is a boolean to know if add or remove a character.
 		let myCharacters = JSON.parse(localStorage.getItem('myCharacters'));
+		let pos = -1;
 
 		if (!myCharacters) {
 			myCharacters = [];
 		}
 
-		myCharacters.push(characterURL);
+		if (add) {
+			myCharacters.push(character);
+		} else {
+			pos = myCharacters.findIndex(char => char.name === character.name);
+			myCharacters.splice(pos, 1);
+
+			if (this._reactInternals._debugOwner.elementType.name === 'MyGalacticLeague') {
+				this.updateMyGalacticLeague(myCharacters);
+			}
+		}
 
 		localStorage.setItem('myCharacters', JSON.stringify(myCharacters));
 
 		this.setState({
-			isMine: true
+			isMine: add,
 		});
-	}
+	};
 
-	characterIsMine = (characterURL) => {
+	characterIsMine = () => {
 		// Function to check if the character is already in My Galactic League.
 		const myCharacters = JSON.parse(localStorage.getItem('myCharacters'));
+		const { character } = this.props;
 		let res = false;
 
 		if (myCharacters) {
-			res = myCharacters.includes(characterURL);
-		} 
-		
+			res = myCharacters.some(char => char.name === character.name);
+		}
+
 		return res;
-	}
+	};
+
+	updateMyGalacticLeague = characters => {
+		this.props.updateMyGalacticLeague(characters);
+	};
 
 	render() {
 		const { character } = this.props;
@@ -78,13 +94,18 @@ class CharacterDetail extends PureComponent {
 
 		return (
 			<div className="CharacterDetail">
-				{!isMine && 
+				{!isMine && (
 					<div className="add-button-container">
-						<i className="material-icons add-remove-button" onClick={() => {this.addCharacterToLeague(character.url)}}>
+						<i
+							className="material-icons add-remove-button add-button"
+							onClick={() => {
+								this.addRemoveCharacterLeague(true, character);
+							}}
+						>
 							person_add_alt_1
 						</i>
 					</div>
-				}
+				)}
 				<h2>{character.name}</h2>
 				<div className="characteristics-container">
 					<ul className="list-no-decoration">
@@ -107,6 +128,18 @@ class CharacterDetail extends PureComponent {
 						</div>
 					</ul>
 				</div>
+				{isMine && (
+					<div className="add-button-container">
+						<i
+							className="material-icons add-remove-button remove-button"
+							onClick={() => {
+								this.addRemoveCharacterLeague(false, character);
+							}}
+						>
+							person_remove_alt_1
+						</i>
+					</div>
+				)}
 			</div>
 		);
 	}
@@ -114,6 +147,7 @@ class CharacterDetail extends PureComponent {
 
 CharacterDetail.propTypes = {
 	character: PropTypes.object,
+	updateMyGalacticLeague: PropTypes.func,
 };
 
 export default CharacterDetail;

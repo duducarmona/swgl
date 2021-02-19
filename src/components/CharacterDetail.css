@@ -32,8 +32,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #66D201;
   position: absolute;
   right: 0;
+  
+}
+
+.add-button {
+  color: #66D201;
   top: 0;
+}
+
+.remove-button {
+  color: #E6605F;
+  bottom: 0;
 }
