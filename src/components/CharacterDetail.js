@@ -48,13 +48,19 @@ class CharacterDetail extends PureComponent {
 		// The parameter "add" is a boolean to know if add or remove a character.
 		let myCharacters = JSON.parse(localStorage.getItem('myCharacters'));
 		let pos = -1;
+		const leagueNotFull = myCharacters.length < 10;
 
 		if (!myCharacters) {
 			myCharacters = [];
 		}
 
 		if (add) {
-			myCharacters.push(character);
+			if (leagueNotFull) {
+				myCharacters.push(character);
+			} else {
+				// There are already 10 characters in My Galactic League.
+				this.props.displayMessageFullLeague();
+			}
 		} else {
 			pos = myCharacters.findIndex(char => char.name === character.name);
 			myCharacters.splice(pos, 1);
@@ -64,13 +70,15 @@ class CharacterDetail extends PureComponent {
 			}
 		}
 
-		localStorage.setItem('myCharacters', JSON.stringify(myCharacters));
+		if (!add || leagueNotFull) {
+			localStorage.setItem('myCharacters', JSON.stringify(myCharacters));
 
-		this.setState({
-			isMine: add,
-		});
+			this.setState({
+				isMine: add,
+			});
 
-		this.props.updateCounter(myCharacters.length);
+			this.props.updateCounter(myCharacters.length);
+		}
 	};
 
 	characterIsMine = () => {
@@ -151,6 +159,7 @@ CharacterDetail.propTypes = {
 	character: PropTypes.object,
 	updateMyGalacticLeague: PropTypes.func,
 	updateCounter: PropTypes.func,
+	displayMessageFullLeague: PropTypes.func,
 };
 
 export default CharacterDetail;

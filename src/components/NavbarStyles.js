@@ -7,9 +7,10 @@ export const NavbarWrapper = styled.nav`
 	align-items: center;
 	position: absolute;
 	top: 30vh;
-	right: ${props => (props.open ? '0' : '-100%')};
+	right: 0;
+	/* right: ${props => (props.open ? '0' : '-50%')}; */
 	width: 50%;
-	transition: right 0.3s linear;
+	/* transition: right 0.3s linear; */
 	background-color: #414850;
 	color: #e6605f;
 	border-radius: 5px;

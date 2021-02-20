@@ -5,6 +5,8 @@ import Header from './Header';
 import CharacterCounter from './CharacterCounter';
 import './Characters.css';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Characters extends PureComponent {
 	state = {
@@ -103,11 +105,16 @@ class Characters extends PureComponent {
 		});
 	};
 
+	displayMessageFullLeague = () => {
+		toast.error('My Galactic League is full!');
+	};
+
 	render() {
 		const { characters, searchValue, numberOfCharacters } = this.state;
 
 		return (
 			<div>
+				<ToastContainer className="ToastContainer" position="bottom-center" type="info"></ToastContainer>
 				<div className="arrow-button-container-right">
 					<Link to={'/league'}>
 						<i className="material-icons arrow-button">keyboard_arrow_right</i>
@@ -139,7 +146,11 @@ class Characters extends PureComponent {
 				<ul className="list-no-decoration">
 					{characters.map((character, index) => (
 						<li key={index}>
-							<CharacterDetail character={character} updateCounter={this.updateCounter} />
+							<CharacterDetail
+								character={character}
+								updateCounter={this.updateCounter}
+								displayMessageFullLeague={this.displayMessageFullLeague}
+							/>
 						</li>
 					))}
 				</ul>

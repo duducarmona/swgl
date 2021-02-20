@@ -222,17 +222,11 @@ class Navbar extends PureComponent {
 		this.props.update(charactersAux);
 	};
 
-	update = characters => {
-		console.log('¿ENTRO AQUÍ EN ALGÚN MOMENTO?????');
-		this.setState({ charactersHeader: characters });
-	};
-
 	render() {
-		const { open } = this.props;
 		const { speciesNamesDisplay, planetsNamesDisplay, starshipsNamesDisplay } = this.state;
 
 		return (
-			<NavbarWrapper open={open}>
+			<NavbarWrapper>
 				<p onClick={() => this.displayItemsFilters('species')}>Species</p>
 				{!this.state.openSpecies && (
 					<ul className="list-no-decoration navbar-list">
@@ -295,7 +289,6 @@ class Navbar extends PureComponent {
 }
 
 Navbar.propTypes = {
-	open: PropTypes.bool,
 	update: PropTypes.func,
 };
 

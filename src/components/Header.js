@@ -22,7 +22,6 @@ class Header extends PureComponent {
 				charactersHeader: characters,
 			},
 			() => {
-				console.log('entro');
 				this.props.update(this.state.charactersHeader);
 			}
 		);
@@ -33,7 +32,7 @@ class Header extends PureComponent {
 
 		return (
 			<HeaderWrapper>
-				<Navbar open={open} update={this.update} />
+				{open && <Navbar update={this.update} />}
 				<MenuButton open={open} handleClick={this.handleClick} />
 			</HeaderWrapper>
 		);
