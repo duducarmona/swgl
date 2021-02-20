@@ -3,3 +3,9 @@
   left: 10px;
   top: 10px;
 }
+
+.galactic-counter-container {
+  position: absolute;
+  top: 105px;
+  left: 10px;
+}

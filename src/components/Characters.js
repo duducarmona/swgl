@@ -120,7 +120,9 @@ class Characters extends PureComponent {
 						<i className="material-icons arrow-button">keyboard_arrow_right</i>
 					</Link>
 				</div>
-				<CharacterCounter numberOfCharacters={numberOfCharacters} />
+				<div className="characters-counter-container">
+					<CharacterCounter numberOfCharacters={numberOfCharacters} />
+				</div>
 				<h1>Star Wars Characters</h1>
 				<div className="search-filter-container">
 					<div className="searcher-container">

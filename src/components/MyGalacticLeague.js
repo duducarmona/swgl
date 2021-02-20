@@ -1,17 +1,18 @@
 import React, { PureComponent } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import './MyGalacticLeague.css';
 import CharacterDetail from './CharacterDetail';
+import CharacterCounter from './CharacterCounter';
 
 class MyGalacticLeague extends PureComponent {
 	state = {
-		myCharacters: []
-	}
+		myCharacters: [],
+	};
 
 	componentDidMount() {
 		this.getMyCharacters();
 	}
-	
+
 	getMyCharacters = () => {
 		let myCharacters = JSON.parse(localStorage.getItem('myCharacters'));
 
@@ -20,12 +21,18 @@ class MyGalacticLeague extends PureComponent {
 		}
 
 		this.setState({
-			myCharacters: myCharacters
+			myCharacters: myCharacters,
 		});
 	};
 
 	updateMyCharacters = characters => {
 		this.setState({ myCharacters: characters });
+	};
+
+	updateCounter = numberOfCharacters => {
+		this.setState({
+			numberOfCharacters: numberOfCharacters,
+		});
 	};
 
 	render() {
@@ -38,11 +45,18 @@ class MyGalacticLeague extends PureComponent {
 						<i className="material-icons arrow-button">keyboard_arrow_left</i>
 					</Link>
 				</div>
+				<div className="galactic-counter-container">
+					<CharacterCounter numberOfCharacters={myCharacters.length} />
+				</div>
 				<h1>My Galactic League</h1>
 				<ul className="list-no-decoration">
 					{myCharacters.map((character, index) => (
 						<li key={index}>
-							<CharacterDetail character={character} updateMyGalacticLeague={this.updateMyCharacters} />
+							<CharacterDetail
+								character={character}
+								updateMyGalacticLeague={this.updateMyCharacters}
+								updateCounter={this.updateCounter}
+							/>
 						</li>
 					))}
 				</ul>

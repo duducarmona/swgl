@@ -73,9 +73,11 @@ class CharacterDetail extends PureComponent {
 		if (!add || leagueNotFull) {
 			localStorage.setItem('myCharacters', JSON.stringify(myCharacters));
 
-			this.setState({
-				isMine: add,
-			});
+			if (this._reactInternals._debugOwner.elementType.name === 'Characters') {
+				this.setState({
+					isMine: add,
+				});
+			}
 
 			this.props.updateCounter(myCharacters.length);
 		}

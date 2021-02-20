@@ -1,3 +1,9 @@
+.characters-counter-container {
+  position: absolute;
+  top: 120px;
+  left: 10px;
+}
+
 .search-filter-container {
   display: flex;
   justify-content: space-around

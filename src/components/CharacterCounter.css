@@ -1,7 +1,4 @@
 .counter-container {
-  position: absolute;
-  top: 120px;
-  left: 10px;
   display: flex;
   align-items: center;
 }
