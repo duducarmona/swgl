@@ -6,6 +6,7 @@ export const NavbarWrapper = styled.nav`
 	justify-content: flex-start;
 	align-items: center;
 	position: absolute;
+	z-index: 1;
 	top: 30vh;
 	right: 0;
 	/* right: ${props => (props.open ? '0' : '-50%')}; */

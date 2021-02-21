@@ -1,3 +1,10 @@
+.header-container {
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+  background-color: #2A333C;
+}
+
 .characters-counter-container {
   position: absolute;
   top: 120px;
@@ -47,4 +54,8 @@
 
 .ToastContainer {
   font-size: 20px;
+}
+
+.characters-list {
+  padding-top: 200px;
 }

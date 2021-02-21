@@ -1,3 +1,19 @@
+.navbar-container {
+  display: flex;
+}
+
+.navbar {
+  overflow-y: scroll;
+}
+
+.navbar-close {
+  height: 18vh;
+}
+
+.navbar-open {
+  height: 70vh;
+}
+
 .navbar-list {
   color: #D0C497;
 }

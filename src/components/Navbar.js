@@ -18,6 +18,7 @@ class Navbar extends PureComponent {
 		speciesSelected: [],
 		planetsSelected: [],
 		starshipsSelected: [],
+		classNameFiltersHeight: 'navbar-container navbar-close',
 	};
 
 	componentDidMount() {
@@ -91,6 +92,14 @@ class Navbar extends PureComponent {
 
 		if (open) {
 			itemsNamesAux = names;
+			this.setState({
+				classNameFiltersHeight: 'navbar-container navbar-open'
+			});
+		}
+		else {
+			this.setState({
+				classNameFiltersHeight: 'navbar-container navbar-close'
+			});
 		}
 
 		switch (category) {
@@ -223,66 +232,70 @@ class Navbar extends PureComponent {
 	};
 
 	render() {
-		const { speciesNamesDisplay, planetsNamesDisplay, starshipsNamesDisplay } = this.state;
+		const { speciesNamesDisplay, planetsNamesDisplay, starshipsNamesDisplay, classNameFiltersHeight } = this.state;
 
 		return (
 			<NavbarWrapper>
-				<p onClick={() => this.displayItemsFilters('species')}>Species</p>
-				{!this.state.openSpecies && (
-					<ul className="list-no-decoration navbar-list">
-						{speciesNamesDisplay.map((specieName, index) => (
-							<li key={index} className="navbar-li">
-								<label>
-									<input
-										type="checkbox"
-										value={specieName}
-										onChange={event => this.handleCheckbox(event, 'species')}
-									></input>
-									{specieName}
-								</label>
-							</li>
-						))}
-					</ul>
-				)}
-				<p onClick={() => this.displayItemsFilters('planets')}>Planets</p>
-				{!this.state.openPlanets && (
-					<ul className="list-no-decoration navbar-list">
-						{planetsNamesDisplay.map((planetName, index) => (
-							<li key={index} className="navbar-li">
-								<label>
-									<input
-										type="checkbox"
-										value={planetName}
-										onChange={event => this.handleCheckbox(event, 'planets')}
-									></input>
-									{planetName}
-								</label>
-							</li>
-						))}
-					</ul>
-				)}
-				<p onClick={() => this.displayItemsFilters('starships')}>Starships</p>
-				{!this.state.openStarships && (
-					<ul className="list-no-decoration navbar-list">
-						{starshipsNamesDisplay.map((starshipName, index) => (
-							<li key={index} className="navbar-li">
-								<label>
-									<input
-										type="checkbox"
-										value={starshipName}
-										onChange={event => this.handleCheckbox(event, 'starships')}
-									></input>
-									{starshipName}
-								</label>
-							</li>
-						))}
-					</ul>
-				)}
-				{(!this.state.openSpecies || !this.state.openPlanets || !this.state.openStarships) && (
-					<button className="navbar-btn" onClick={this.applyFilters}>
-						Apply
-					</button>
-				)}
+				<div className={classNameFiltersHeight}>
+					<div className="navbar">
+						<p onClick={() => this.displayItemsFilters('species')}>Species</p>
+						{!this.state.openSpecies && (
+							<ul className="list-no-decoration navbar-list">
+								{speciesNamesDisplay.map((specieName, index) => (
+									<li key={index} className="navbar-li">
+										<label>
+											<input
+												type="checkbox"
+												value={specieName}
+												onChange={event => this.handleCheckbox(event, 'species')}
+											></input>
+											{specieName}
+										</label>
+									</li>
+								))}
+							</ul>
+						)}
+						<p onClick={() => this.displayItemsFilters('planets')}>Planets</p>
+						{!this.state.openPlanets && (
+							<ul className="list-no-decoration navbar-list">
+								{planetsNamesDisplay.map((planetName, index) => (
+									<li key={index} className="navbar-li">
+										<label>
+											<input
+												type="checkbox"
+												value={planetName}
+												onChange={event => this.handleCheckbox(event, 'planets')}
+											></input>
+											{planetName}
+										</label>
+									</li>
+								))}
+							</ul>
+						)}
+						<p onClick={() => this.displayItemsFilters('starships')}>Starships</p>
+						{!this.state.openStarships && (
+							<ul className="list-no-decoration navbar-list">
+								{starshipsNamesDisplay.map((starshipName, index) => (
+									<li key={index} className="navbar-li">
+										<label>
+											<input
+												type="checkbox"
+												value={starshipName}
+												onChange={event => this.handleCheckbox(event, 'starships')}
+											></input>
+											{starshipName}
+										</label>
+									</li>
+								))}
+							</ul>
+						)}
+						{(!this.state.openSpecies || !this.state.openPlanets || !this.state.openStarships) && (
+							<button className="navbar-btn" onClick={this.applyFilters}>
+								Apply
+							</button>
+						)}
+					</div>
+				</div>
 			</NavbarWrapper>
 		);
 	}

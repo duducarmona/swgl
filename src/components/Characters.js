@@ -115,37 +115,39 @@ class Characters extends PureComponent {
 		return (
 			<div>
 				<ToastContainer className="ToastContainer" position="bottom-center" type="info"></ToastContainer>
-				<div className="arrow-button-container-right">
-					<Link to={'/league'}>
-						<i className="material-icons arrow-button">keyboard_arrow_right</i>
-					</Link>
-				</div>
-				<div className="characters-counter-container">
-					<CharacterCounter numberOfCharacters={numberOfCharacters} />
-				</div>
-				<h1>Star Wars Characters</h1>
-				<div className="search-filter-container">
-					<div className="searcher-container">
-						<input
-							className="searcher-input searcher"
-							type="text"
-							name="searchValue"
-							value={searchValue}
-							onChange={this.handleInput}
-							placeholder="Search by name"
-						></input>
-						<i
-							className="material-icons magnifying-glass searcher"
-							onClick={() => {
-								this.searchByCharacterName(searchValue);
-							}}
-						>
-							search
-						</i>
+				<div className="header-container">
+					<div className="arrow-button-container-right">
+						<Link to={'/league'}>
+							<i className="material-icons arrow-button">keyboard_arrow_right</i>
+						</Link>
 					</div>
-					<Header update={this.update} />
+					<div className="characters-counter-container">
+						<CharacterCounter numberOfCharacters={numberOfCharacters} />
+					</div>
+					<h1>Star Wars Characters</h1>
+					<div className="search-filter-container">
+						<div className="searcher-container">
+							<input
+								className="searcher-input searcher"
+								type="text"
+								name="searchValue"
+								value={searchValue}
+								onChange={this.handleInput}
+								placeholder="Search by name"
+							></input>
+							<i
+								className="material-icons magnifying-glass searcher"
+								onClick={() => {
+									this.searchByCharacterName(searchValue);
+								}}
+							>
+								search
+							</i>
+						</div>
+						<Header update={this.update} />
+					</div>
 				</div>
-				<ul className="list-no-decoration">
+				<ul className="list-no-decoration characters-list">
 					{characters.map((character, index) => (
 						<li key={index}>
 							<CharacterDetail
