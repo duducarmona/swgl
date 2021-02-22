@@ -40,16 +40,18 @@ class MyGalacticLeague extends PureComponent {
 
 		return (
 			<div>
-				<div className="arrow-button-container-left">
-					<Link to={`/`}>
-						<i className="material-icons arrow-button">keyboard_arrow_left</i>
-					</Link>
+				<div className="header-league-container">
+					<div className="arrow-button-container-left">
+						<Link to={`/`}>
+							<i className="material-icons arrow-button">keyboard_arrow_left</i>
+						</Link>
+					</div>
+					<div className="galactic-counter-container">
+						<CharacterCounter numberOfCharacters={myCharacters.length} />
+					</div>
+					<h1>My Galactic League</h1>
 				</div>
-				<div className="galactic-counter-container">
-					<CharacterCounter numberOfCharacters={myCharacters.length} />
-				</div>
-				<h1>My Galactic League</h1>
-				<ul className="list-no-decoration">
+				<ul className="list-no-decoration characters-league-list">
 					{myCharacters.map((character, index) => (
 						<li key={index}>
 							<CharacterDetail
